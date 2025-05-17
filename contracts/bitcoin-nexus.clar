@@ -81,3 +81,80 @@
     level: uint,
   }
 )
+
+;; Avatar Metadata
+(define-map avatar-metadata
+  { avatar-id: uint }
+  {
+    name: (string-ascii 50),
+    level: uint,
+    experience: uint,
+    achievements: (list 20 (string-ascii 50)),
+    equipped-assets: (list 5 uint),
+    world-access: (list 10 uint),
+  }
+)
+
+;; Game Worlds
+(define-map game-worlds
+  { world-id: uint }
+  {
+    name: (string-ascii 50),
+    description: (string-ascii 200),
+    entry-requirement: uint,
+    active-players: uint,
+    total-rewards: uint,
+  }
+)
+
+;; Player Leaderboard
+(define-map leaderboard
+  { player: principal }
+  {
+    score: uint,
+    games-played: uint,
+    total-rewards: uint,
+    avatar-id: uint,
+    rank: uint,
+    achievements: (list 20 (string-ascii 50)),
+  }
+)
+
+;; Validation Functions
+
+(define-private (is-valid-name (name (string-ascii 50)))
+  (and
+    (>= (len name) u1)
+    (<= (len name) u50)
+    (not (is-eq name ""))
+  )
+)
+
+(define-private (is-valid-description (description (string-ascii 200)))
+  (and
+    (>= (len description) u1)
+    (<= (len description) u200)
+    (not (is-eq description ""))
+  )
+)
+
+(define-private (is-valid-rarity (rarity (string-ascii 20)))
+  (or
+    (is-eq rarity "common")
+    (is-eq rarity "uncommon")
+    (is-eq rarity "rare")
+    (is-eq rarity "epic")
+    (is-eq rarity "legendary")
+  )
+)
+
+(define-private (is-valid-power-level (power uint))
+  (and (>= power u1) (<= power u1000))
+)
+
+(define-private (is-valid-attributes (attributes (list 10 (string-ascii 20))))
+  (and
+    (>= (len attributes) u1)
+    (<= (len attributes) u10)
+  )
+)
